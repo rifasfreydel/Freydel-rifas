@@ -1,119 +1,162 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [tickets, setTickets] = useState(2);
-  const [bank, setBank] = useState(null);
-  const [file, setFile] = useState(null);
-
-  const pricePerTicket = 15;
-  const total = tickets * pricePerTicket;
-
-  const quickAdd = [2, 10, 20, 50, 100];
+  const [cantidad, setCantidad] = useState(2);
+  const precio = 15; // precio por boleto en Bs
+  const total = cantidad * precio;
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold mb-6">🎟️ Combo Gárgola</h1>
+    <div style={{ fontFamily: "Arial, sans-serif", background: "#fff", color: "#333" }}>
+      {/* HEADER */}
+      <header style={{ textAlign: "center", padding: "12px", background: "#ff6600" }}>
+        <img src="/logo.png" alt="Logo" style={{ height: "55px" }} />
+      </header>
 
-      {/* Selección de Tickets */}
-      <h2 className="text-xl mb-3">¿Cuántos tickets quieres?</h2>
-      <div className="flex gap-3 mb-4">
-        {quickAdd.map((q) => (
-          <button
-            key={q}
-            className="bg-red-600 px-4 py-2 rounded-xl hover:bg-red-700"
-            onClick={() => setTickets(tickets + q)}
-          >
-            +{q}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-3 mb-6">
-        <button
-          className="bg-gray-700 px-4 py-2 rounded-xl hover:bg-gray-600"
-          onClick={() => setTickets(Math.max(2, tickets - 1))}
-        >
-          -
-        </button>
-        <span className="text-2xl font-bold">{tickets} boletos</span>
-        <button
-          className="bg-gray-700 px-4 py-2 rounded-xl hover:bg-gray-600"
-          onClick={() => setTickets(tickets + 1)}
-        >
-          +
-        </button>
-      </div>
-
-      {/* Total */}
-      <p className="text-lg font-semibold mb-8">
-        Total: <span className="text-green-400">{total} Bs</span>
-      </p>
-
-      {/* Selección de banco */}
-      <h2 className="text-xl mb-3">¿A dónde quieres transferir?</h2>
-      <div className="flex gap-6 mb-6">
-        <button
-          className={`p-3 rounded-xl border ${
-            bank === "BNC" ? "border-green-400" : "border-gray-600"
-          }`}
-          onClick={() => setBank("BNC")}
-        >
-          🏦 BNC
-        </button>
-        <button
-          className={`p-3 rounded-xl border ${
-            bank === "Zelle" ? "border-green-400" : "border-gray-600"
-          }`}
-          onClick={() => setBank("Zelle")}
-        >
-          💵 Zelle
-        </button>
-        <button
-          className={`p-3 rounded-xl border ${
-            bank === "Binance" ? "border-green-400" : "border-gray-600"
-          }`}
-          onClick={() => setBank("Binance")}
-        >
-          🟡 Binance
-        </button>
-      </div>
-
-      {bank && (
-        <div className="mb-6 text-center">
-          <p className="text-lg font-semibold">Detalles de {bank}:</p>
-          {bank === "BNC" && <p>Cuenta: 0102-xxxx-xxxx-xxxx</p>}
-          {bank === "Zelle" && <p>Email: ejemplo@zelle.com</p>}
-          {bank === "Binance" && <p>USDT Wallet: xxxxxx</p>}
-        </div>
-      )}
-
-      {/* Comprobante */}
-      <h2 className="text-xl font-bold mb-3">📄 Comprobante de pago</h2>
-      <label className="border-2 border-dashed border-gray-400 rounded-xl p-6 w-full text-center cursor-pointer mb-4">
-        <input
-          type="file"
-          className="hidden"
-          onChange={(e) => setFile(e.target.files[0])}
+      {/* FLAYER */}
+      <div style={{ textAlign: "center", margin: "15px 0" }}>
+        <img
+          src="/flayer.png"
+          alt="Flayer"
+          style={{
+            width: "95%",
+            maxWidth: "600px",
+            borderRadius: "12px",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+          }}
         />
-        {file ? (
-          <p>{file.name}</p>
-        ) : (
-          <p className="text-gray-400">📷 Sube tu captura aquí</p>
-        )}
-      </label>
+      </div>
 
-      <p className="text-gray-400 text-sm mb-6">
-        BANESCO: <span className="text-white">{total} Bs</span> ({tickets} boletos)
-      </p>
+      {/* CONTENEDOR */}
+      <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>🎟️ Compra tus boletos</h2>
 
-      {/* Confirmar */}
-      <p className="text-xs text-gray-400 mb-3">
-        Al confirmar autorizo el uso de <span className="text-orange-400">Mis Datos Personales</span>
-      </p>
+        {/* BOLETOS */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px", margin: "20px 0" }}>
+          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>-</button>
+          <span style={{ fontSize: "20px", fontWeight: "bold" }}>{cantidad}</span>
+          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>+</button>
+        </div>
 
-      <button className="bg-orange-500 text-white font-bold text-lg px-6 py-3 rounded-2xl shadow-lg hover:bg-orange-600">
-        CONFIRMAR
-      </button>
+        {/* TOTAL */}
+        <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Total: <span style={{ color: "#ff6600" }}>{total} Bs</span>
+        </h3>
+
+        {/* FORMULARIO */}
+        <form style={{ marginTop: "25px" }}>
+          <label style={label}>Nombres y Apellidos *</label>
+          <input type="text" required style={input} />
+
+          <label style={label}>Teléfono *</label>
+          <input type="tel" required style={input} />
+
+          <label style={label}>Correo *</label>
+          <input type="email" required style={input} />
+
+          {/* MÉTODOS DE PAGO */}
+          <h3 style={{ margin: "25px 0 10px" }}>💳 Métodos de Pago</h3>
+          <div style={card}>
+            <strong>Pago Móvil - Banco Provincial</strong>
+            <p style={{ margin: "5px 0" }}>
+              Teléfono: <b>04244214965</b><br />
+              C.I: <b>30281789</b>
+            </p>
+          </div>
+
+          <div style={card}>
+            <strong>Binance</strong>
+            <p style={{ margin: "5px 0" }}>
+              ID: <b>403244297</b>
+            </p>
+          </div>
+
+          {/* COMPROBANTE DE PAGO */}
+          <h3 style={{ margin: "30px 0 10px" }}>🧾 Comprobante de Pago</h3>
+
+          <label style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <input type="checkbox" /> Enviar captura inmediatamente
+          </label>
+
+          <div style={uploadBox}>
+            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
+              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
+                📤 Foto / Captura de Pantalla
+              </div>
+            </label>
+            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+          </div>
+
+          <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center" }}>
+            BANESCO: {total} Bs ({cantidad} boletos)
+          </p>
+
+          <p style={{ textAlign: "center", fontSize: "12px", marginTop: "10px" }}>
+            Al confirmar autorizo el uso de <span style={{ color: "#ff6600", fontWeight: "bold" }}>Mis Datos Personales</span>
+          </p>
+
+          <button type="submit" style={btnMain}>
+            CONFIRMAR
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+
+/* ==== ESTILOS ==== */
+const btnMain = {
+  display: "block",
+  width: "100%",
+  padding: "15px",
+  background: "#ff6600",
+  color: "white",
+  fontSize: "16px",
+  fontWeight: "bold",
+  border: "none",
+  borderRadius: "8px",
+  margin: "15px 0",
+  cursor: "pointer",
+};
+
+const btnCircle = {
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+  border: "none",
+  background: "#ff6600",
+  color: "#fff",
+  fontSize: "20px",
+  fontWeight: "bold",
+  cursor: "pointer",
+};
+
+const input = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  border: "1px solid #ccc",
+  borderRadius: "6px",
+  fontSize: "14px",
+};
+
+const label = {
+  fontWeight: "bold",
+  display: "block",
+  marginBottom: "5px",
+};
+
+const card = {
+  background: "#f9f9f9",
+  padding: "12px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+  marginBottom: "15px",
+};
+
+const uploadBox = {
+  border: "2px dashed #ccc",
+  borderRadius: "8px",
+  padding: "20px",
+  textAlign: "center",
+  marginBottom: "15px",
+};
