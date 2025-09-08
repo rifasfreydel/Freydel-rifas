@@ -98,6 +98,74 @@ export default function Home() {
             CONFIRMAR
           </button>
         </form>
+
+        {/* === PORCENTAJE DE VENTA === */}
+        <div style={{ marginTop: "30px", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "10px" }}>🎯 Progreso de la Rifa</h3>
+          <div style={{
+            background: "#e0e0e0",
+            borderRadius: "20px",
+            overflow: "hidden",
+            height: "25px",
+            maxWidth: "500px",
+            margin: "0 auto"
+          }}>
+            <div style={{
+              width: "42.7%", // <- aquí luego conectamos con Firebase
+              background: "#ff6600",
+              height: "100%",
+              textAlign: "center",
+              color: "white",
+              fontWeight: "bold",
+              lineHeight: "25px"
+            }}>
+              42.7% vendido
+            </div>
+          </div>
+        </div>
+
+        {/* === VERIFICAR TICKETS === */}
+        <div style={{ marginTop: "40px", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "15px" }}>📩 ¿Quieres verificar tus tickets?</h3>
+          <p>Ingresa tu correo y te los enviaremos allí:</p>
+          
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              alert("✅ Revisa tu bandeja de entrada, pronto recibirás tus tickets.");
+            }}
+            style={{ maxWidth: "400px", margin: "20px auto" }}
+          >
+            <input
+              type="email"
+              placeholder="Ingresa tu correo..."
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                marginBottom: "15px"
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#ff6600",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "16px",
+                cursor: "pointer"
+              }}
+            >
+              Verificar mis tickets
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
