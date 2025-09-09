@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy } from "lucide-react"; // icono minimalista
+import { Copy, Instagram } from "lucide-react"; // iconos minimalistas
 
 export default function Home() {
   const [cantidad, setCantidad] = useState(2);
@@ -232,6 +232,34 @@ export default function Home() {
           </form>
         </div>
       </div>
+
+      {/* === FOOTER === */}
+      <footer
+        style={{
+          background: "#111",
+          color: "#f1f1f1",
+          padding: "25px 20px",
+          marginTop: "50px",
+          textAlign: "center",
+        }}
+      >
+        <h3 style={{ color: "#ff6600", marginBottom: "10px" }}>📌 Contacto</h3>
+        <p style={{ margin: "5px 0" }}>📍 La Guaira, Distrito Capital, Venezuela</p>
+        <p style={{ margin: "5px 0" }}>📞 +58 424 4214965</p>
+        <div style={{ marginTop: "15px" }}>
+          <a
+            href="https://instagram.com/tucuenta"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#ff6600", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", fontWeight: "bold" }}
+          >
+            <Instagram size={20} /> Síguenos en Instagram
+          </a>
+        </div>
+        <p style={{ marginTop: "15px", fontSize: "12px", color: "#888" }}>
+          © {new Date().getFullYear()} Rifa con Freydel. Todos los derechos reservados.
+        </p>
+      </footer>
     </div>
   );
 }
