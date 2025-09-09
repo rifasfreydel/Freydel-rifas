@@ -1,233 +1,127 @@
+// pages/index.js
 import { useState } from "react";
 
 export default function Home() {
-  const [cantidad, setCantidad] = useState(2);
-  const precio = 15; // precio por boleto en Bs
-  const total = cantidad * precio;
+  const [copied, setCopied] = useState(false);
 
-  // copiar texto
-  const copiar = (texto) => {
-    navigator.clipboard.writeText(texto);
-    alert("Copiado ✅");
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", background: "#000", color: "#f1f1f1" }}>
-      {/* HEADER */}
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 20px",
-          background: "#ff6600",
-        }}
-      >
-        <img src="/logo.png" alt="Logo" style={{ height: "65px" }} />
-        <p style={{ fontSize: "13px", lineHeight: "1.4", marginLeft: "15px", color: "#fff" }}>
-          <b>Juega y gana con Freydel</b> 🎉 <br />
-          Cada boleto no solo te acerca al premio, <br />
-          también te convierte en parte de una comunidad que confía, juega y gana.
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
+      {/* Header */}
+      <header className="w-full flex items-center bg-orange-600 px-6 py-4">
+        <img src="/logo.png" alt="Logo" className="h-16 w-16 mr-4" />
+        <p className="text-lg md:text-xl font-semibold leading-snug">
+          Juega y gana con Freydel, cada boleto no solo te acerca al premio,
+          sino que también te convierte en parte de una comunidad que confía,
+          juega y gana. Tu participación es la clave para hacer realidad sueños
+          y vivir la emoción de ganar. ¡Asegura tus boletos hoy y no te quedes
+          fuera!
         </p>
       </header>
 
-      {/* FLAYER */}
-      <div style={{ textAlign: "center", margin: "15px 0" }}>
+      {/* Flayer */}
+      <section className="w-full flex justify-center mt-6">
         <img
           src="/flayer.png"
           alt="Flayer"
-          style={{
-            width: "95%",
-            maxWidth: "600px",
-            borderRadius: "12px",
-            boxShadow: "0 4px 15px rgba(255,102,0,0.5)",
-          }}
+          className="rounded-2xl shadow-lg max-w-md"
         />
-      </div>
+      </section>
 
-      {/* CONTENEDOR */}
-      <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#ff6600" }}>
-          🎟️ Compra tus boletos
-        </h2>
+      {/* Datos Bancarios */}
+      <section className="mt-10 w-full max-w-xl px-6">
+        <h2 className="text-2xl font-bold mb-4 text-center">Métodos de Pago</h2>
 
-        {/* BOLETOS */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "15px",
-            margin: "20px 0",
-          }}
-        >
-          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>
-            -
-          </button>
-          <span style={{ fontSize: "22px", fontWeight: "bold" }}>{cantidad}</span>
-          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>
-            +
-          </button>
+        <div className="bg-gray-900 rounded-2xl p-4 mb-4 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img src="/provincial.png" alt="Provincial" className="h-10" />
+              <div>
+                <p className="font-semibold">Banco Provincial</p>
+                <p>CI: 30281789</p>
+                <p>Tel: 04244214965</p>
+              </div>
+            </div>
+            <button
+              onClick={() => copyToClipboard("Banco Provincial - CI: 30281789 - Tel: 04244214965")}
+              className="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded-lg text-sm"
+            >
+              Copiar
+            </button>
+          </div>
         </div>
 
-        {/* TOTAL */}
-        <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
-          Total: <span style={{ color: "#ff6600" }}>{total} Bs</span>
-        </h3>
-
-        {/* FORMULARIO */}
-        <form style={{ marginTop: "25px" }}>
-          <label style={label}>Nombres y Apellidos *</label>
-          <input type="text" required style={input} />
-
-          <label style={label}>Teléfono *</label>
-          <input type="tel" required style={input} />
-
-          <label style={label}>Correo *</label>
-          <input type="email" required style={input} />
-
-          {/* MÉTODOS DE PAGO */}
-          <h3 style={{ margin: "25px 0 15px", color: "#ff6600" }}>💳 Métodos de Pago</h3>
-
-          {/* Pago Móvil */}
-          <div style={card}>
-            <div style={cardHeader}>
-              <img src="/provincial.png" alt="Provincial" style={{ height: "25px" }} />
-              <button type="button" onClick={() => copiar("04244214965 - CI: 30281789")} style={copyBtn}>
-                📋
-              </button>
-            </div>
-            <p style={{ margin: "5px 0" }}>
-              Teléfono: <b>04244214965</b> <br />
-              C.I: <b>30281789</b>
-            </p>
-          </div>
-
-          {/* Binance */}
-          <div style={card}>
-            <div style={cardHeader}>
-              <img src="/binance.png" alt="Binance" style={{ height: "25px" }} />
-              <button type="button" onClick={() => copiar("ID: 403244297")} style={copyBtn}>
-                📋
-              </button>
-            </div>
-            <p style={{ margin: "5px 0" }}>
-              ID: <b>403244297</b>
-            </p>
-          </div>
-
-          {/* COMPROBANTE */}
-          <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>🧾 Comprobante de Pago</h3>
-
-          <div style={uploadBox}>
-            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
-              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
-                📤 Foto / Captura de Pantalla
+        <div className="bg-gray-900 rounded-2xl p-4 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img src="/binance.png" alt="Binance" className="h-10" />
+              <div>
+                <p className="font-semibold">Binance</p>
+                <p>ID: 403244297</p>
               </div>
-            </label>
-            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+            </div>
+            <button
+              onClick={() => copyToClipboard("Binance ID: 403244297")}
+              className="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded-lg text-sm"
+            >
+              Copiar
+            </button>
           </div>
+        </div>
 
-          <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center", color: "#ff6600" }}>
-            ⚠️ Recuerda: Debes subir el comprobante para validar tu compra.
+        {copied && (
+          <p className="text-green-500 text-sm mt-2 text-center">
+            ✅ Copiado al portapapeles
           </p>
+        )}
+      </section>
 
-          <p style={{ marginTop: "15px", fontWeight: "bold", textAlign: "center" }}>
-            {total} Bs ({cantidad} boletos)
-          </p>
+      {/* Comprobante */}
+      <section className="mt-10 w-full max-w-xl px-6">
+        <h2 className="text-2xl font-bold mb-4 text-center">Subir Comprobante</h2>
+        <input
+          type="file"
+          accept="image/*"
+          className="block w-full text-sm text-gray-300 
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-full file:border-0
+            file:text-sm file:font-semibold
+            file:bg-orange-600 file:text-white
+            hover:file:bg-orange-700
+          "
+        />
+        <p className="text-xs text-gray-400 mt-2">
+          ⚠️ Asegúrate de subir tu comprobante completo y legible.
+        </p>
+      </section>
 
-          <button type="submit" style={btnMain}>
-            CONFIRMAR
-          </button>
-        </form>
-
-        {/* === FOOTER === */}
-        <footer style={{ marginTop: "40px", textAlign: "center", padding: "20px", borderTop: "1px solid #333" }}>
-          <a
-            href="https://instagram.com/TU_INSTAGRAM"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#ff6600", fontSize: "20px", textDecoration: "none" }}
+      {/* Footer */}
+      <footer className="mt-12 mb-6">
+        <a
+          href="https://instagram.com/TU_INSTAGRAM"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-2 text-orange-500 hover:text-orange-600"
+        >
+          {/* Icono Instagram con SVG */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            className="w-6 h-6"
           >
-            📷 Sígueme en Instagram
-          </a>
-        </footer>
-      </div>
+            <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7 .1 5.7.2 4.7.5 3.9.9c-.9.3-1.6.8-2.3 1.5C.8 3 0.3 3.7 0 4.6c-.4.8-.7 1.8-.8 3.1C-.9 8.9-.9 9.3-.9 12c0 2.7 0 3.1.1 4.3.1 1.3.4 2.3.8 3.1.3.9.8 1.6 1.5 2.3.7.7 1.4 1.2 2.3 1.5.8.4 1.8.7 3.1.8 1.2.1 1.6.1 4.3.1s3.1 0 4.3-.1c1.3-.1 2.3-.4 3.1-.8.9-.3 1.6-.8 2.3-1.5.7-.7 1.2-1.4 1.5-2.3.4-.8.7-1.8.8-3.1.1-1.2.1-1.6.1-4.3s0-3.1-.1-4.3c-.1-1.3-.4-2.3-.8-3.1-.3-.9-.8-1.6-1.5-2.3C20.3.8 19.6.3 18.7 0c-.8-.4-1.8-.7-3.1-.8C14.1-.9 13.7-.9 12-.9c-2.7 0-3.1 0-4.3.1-1.3.1-2.3.4-3.1.8-.9.3-1.6.8-2.3 1.5C.8 3 .3 3.7 0 4.6c-.4.8-.7 1.8-.8 3.1C-.9 8.9-.9 9.3-.9 12c0 2.7 0 3.1.1 4.3.1 1.3.4 2.3.8 3.1.3.9.8 1.6 1.5 2.3.7.7 1.4 1.2 2.3 1.5.8.4 1.8.7 3.1.8 1.2.1 1.6.1 4.3.1s3.1 0 4.3-.1c1.3-.1 2.3-.4 3.1-.8.9-.3 1.6-.8 2.3-1.5.7-.7 1.2-1.4 1.5-2.3.4-.8.7-1.8.8-3.1.1-1.2.1-1.6.1-4.3s0-3.1-.1-4.3c-.1-1.3-.4-2.3-.8-3.1-.3-.9-.8-1.6-1.5-2.3C20.3.8 19.6.3 18.7 0c-.8-.4-1.8-.7-3.1-.8C14.1-.9 13.7-.9 12-.9Z" />
+            <circle cx="12" cy="12" r="3.2" />
+          </svg>
+          <span>Síguenos en Instagram</span>
+        </a>
+      </footer>
     </div>
   );
 }
-
-/* ==== ESTILOS ==== */
-const btnMain = {
-  display: "block",
-  width: "100%",
-  padding: "15px",
-  background: "#ff6600",
-  color: "white",
-  fontSize: "16px",
-  fontWeight: "bold",
-  border: "none",
-  borderRadius: "8px",
-  margin: "15px 0",
-  cursor: "pointer",
-};
-
-const btnCircle = {
-  width: "40px",
-  height: "40px",
-  borderRadius: "50%",
-  border: "none",
-  background: "#ff6600",
-  color: "#fff",
-  fontSize: "20px",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
-
-const input = {
-  width: "100%",
-  padding: "10px",
-  marginBottom: "15px",
-  border: "1px solid #444",
-  borderRadius: "6px",
-  fontSize: "14px",
-  background: "#111",
-  color: "#fff",
-};
-
-const label = {
-  fontWeight: "bold",
-  display: "block",
-  marginBottom: "5px",
-};
-
-const card = {
-  background: "#111",
-  padding: "12px",
-  borderRadius: "8px",
-  boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
-  marginBottom: "15px",
-};
-
-const cardHeader = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: "8px",
-};
-
-const copyBtn = {
-  background: "transparent",
-  border: "none",
-  color: "#ff6600",
-  fontSize: "18px",
-  cursor: "pointer",
-};
-
-const uploadBox = {
-  border: "2px dashed #444",
-  borderRadius: "8px",
-  padding: "20px",
-  textAlign: "center",
-  marginBottom: "15px",
-};
