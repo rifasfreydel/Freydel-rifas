@@ -1,125 +1,230 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [tickets, setTickets] = useState(2);
-  const price = 15;
-  const total = tickets * price;
-
-  const handleTickets = (value) => {
-    if (value < 2) return; // mínimo 2 boletos
-    setTickets(value);
-  };
+  const [cantidad, setCantidad] = useState(2);
+  const precio = 15; // precio por boleto en Bs
+  const total = cantidad * precio;
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div style={{ fontFamily: "Arial, sans-serif", background: "#fff", color: "#333" }}>
       {/* HEADER */}
-      <header className="flex flex-col items-center py-6">
-        <img src="/logo.png" alt="Logo" className="w-28 mb-4" />
-        <h1 className="text-2xl font-bold text-center">
-          🎟️ Juega y Gana con Freydel
-        </h1>
-        <p className="text-gray-400 text-center max-w-lg mt-2 px-4">
-          Cada boleto no solo te acerca al premio, sino que también te convierte
-          en parte de una comunidad que confía, juega y gana. ¡Asegura tus boletos
-          hoy y no te quedes fuera!
-        </p>
+      <header style={{ textAlign: "center", padding: "12px", background: "#ff6600" }}>
+        <img src="/logo.png" alt="Logo" style={{ height: "55px" }} />
       </header>
 
-      {/* FLYER */}
-      <section className="flex justify-center mb-6">
-        <img src="/flayer.png" alt="Flayer" className="rounded-lg shadow-lg w-80" />
-      </section>
+      {/* FLAYER */}
+      <div style={{ textAlign: "center", margin: "15px 0" }}>
+        <img
+          src="/flayer.png"
+          alt="Flayer"
+          style={{
+            width: "95%",
+            maxWidth: "600px",
+            borderRadius: "12px",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+          }}
+        />
+      </div>
 
-      {/* FORMULARIO DE COMPRA */}
-      <section className="bg-gray-900 rounded-xl max-w-md mx-auto p-6 shadow-lg">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Participa en la Rifa
-        </h2>
+      {/* CONTENEDOR */}
+      <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>🎟️ Compra tus boletos</h2>
 
-        {/* Datos */}
-        <input
-          type="text"
-          placeholder="Nombre completo"
-          className="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700"
-        />
-        <input
-          type="text"
-          placeholder="Teléfono"
-          className="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700"
-        />
-        <input
-          type="email"
-          placeholder="Correo"
-          className="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700"
-        />
-        <input
-          type="text"
-          placeholder="Cédula"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
-        />
-
-        {/* Selección de boletos */}
-        <div className="flex items-center justify-between mb-4">
-          <button
-            onClick={() => handleTickets(tickets - 1)}
-            className="bg-gray-700 px-4 py-2 rounded"
-          >
-            -
-          </button>
-          <span className="text-lg">{tickets} boletos</span>
-          <button
-            onClick={() => handleTickets(tickets + 1)}
-            className="bg-gray-700 px-4 py-2 rounded"
-          >
-            +
-          </button>
+        {/* BOLETOS */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px", margin: "20px 0" }}>
+          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>-</button>
+          <span style={{ fontSize: "20px", fontWeight: "bold" }}>{cantidad}</span>
+          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>+</button>
         </div>
 
-        {/* Total */}
-        <p className="text-center text-lg font-semibold mb-4">
-          Total: {total} Bs
-        </p>
+        {/* TOTAL */}
+        <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Total: <span style={{ color: "#ff6600" }}>{total} Bs</span>
+        </h3>
 
-        {/* Métodos de pago */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Métodos de Pago</h3>
-          <div className="bg-gray-800 p-3 rounded mb-2">
-            <p className="text-sm">📱 Pago Móvil</p>
-            <p className="text-sm">Banco Provincial</p>
-            <p className="text-sm">CI: 30281789</p>
-            <p className="text-sm">Tel: 04244214965</p>
-          </div>
-          <div className="bg-gray-800 p-3 rounded">
-            <p className="text-sm">💰 Binance</p>
-            <p className="text-sm">ID: 403244297</p>
-          </div>
-        </div>
+        {/* FORMULARIO */}
+        <form style={{ marginTop: "25px" }}>
+          <label style={label}>Nombres y Apellidos *</label>
+          <input type="text" required style={input} />
 
-        {/* Subir comprobante */}
-        <div className="mb-4">
-          <label className="block mb-1 text-sm">
-            Sube tu comprobante de pago
+          <label style={label}>Teléfono *</label>
+          <input type="tel" required style={input} />
+
+          <label style={label}>Correo *</label>
+          <input type="email" required style={input} />
+
+          {/* MÉTODOS DE PAGO */}
+          <h3 style={{ margin: "25px 0 10px" }}>💳 Métodos de Pago</h3>
+          <div style={card}>
+            <strong>Pago Móvil - Banco Provincial</strong>
+            <p style={{ margin: "5px 0" }}>
+              Teléfono: <b>04244214965</b><br />
+              C.I: <b>30281789</b>
+            </p>
+          </div>
+
+          <div style={card}>
+            <strong>Binance</strong>
+            <p style={{ margin: "5px 0" }}>
+              ID: <b>403244297</b>
+            </p>
+          </div>
+
+          {/* COMPROBANTE DE PAGO */}
+          <h3 style={{ margin: "30px 0 10px" }}>🧾 Comprobante de Pago</h3>
+
+          <label style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <input type="checkbox" /> Enviar captura inmediatamente
           </label>
-          <input
-            type="file"
-            className="w-full p-2 bg-gray-800 border border-gray-700 rounded"
-          />
-          <p className="text-xs text-gray-400 mt-1">
-            ⚠️ Importante: El comprobante será revisado antes de asignar tus
-            números.
+
+          <div style={uploadBox}>
+            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
+              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
+                📤 Foto / Captura de Pantalla
+              </div>
+            </label>
+            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+          </div>
+
+          <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center" }}>
+            BANESCO: {total} Bs ({cantidad} boletos)
           </p>
+
+          <p style={{ textAlign: "center", fontSize: "12px", marginTop: "10px" }}>
+            Al confirmar autorizo el uso de <span style={{ color: "#ff6600", fontWeight: "bold" }}>Mis Datos Personales</span>
+          </p>
+
+          <button type="submit" style={btnMain}>
+            CONFIRMAR
+          </button>
+        </form>
+
+        {/* === PORCENTAJE DE VENTA === */}
+        <div style={{ marginTop: "30px", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "10px" }}>🎯 Progreso de la Rifa</h3>
+          <div style={{
+            background: "#e0e0e0",
+            borderRadius: "20px",
+            overflow: "hidden",
+            height: "25px",
+            maxWidth: "500px",
+            margin: "0 auto"
+          }}>
+            <div style={{
+              width: "42.7%", // <- aquí luego conectamos con Firebase
+              background: "#ff6600",
+              height: "100%",
+              textAlign: "center",
+              color: "white",
+              fontWeight: "bold",
+              lineHeight: "25px"
+            }}>
+              42.7% vendido
+            </div>
+          </div>
         </div>
 
-        {/* Botón */}
-        <button className="w-full bg-red-600 hover:bg-red-700 py-3 rounded font-semibold">
-          Enviar
-        </button>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="text-center py-6 text-gray-500 text-sm">
-        © {new Date().getFullYear()} Freydel Rifas. Todos los derechos reservados.
-      </footer>
+        {/* === VERIFICAR TICKETS === */}
+        <div style={{ marginTop: "40px", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "15px" }}>📩 ¿Quieres verificar tus tickets?</h3>
+          <p>Ingresa tu correo y te los enviaremos allí:</p>
+          
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              alert("✅ Revisa tu bandeja de entrada, pronto recibirás tus tickets.");
+            }}
+            style={{ maxWidth: "400px", margin: "20px auto" }}
+          >
+            <input
+              type="email"
+              placeholder="Ingresa tu correo..."
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                marginBottom: "15px"
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#ff6600",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "16px",
+                cursor: "pointer"
+              }}
+            >
+              Verificar mis tickets
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
+
+/* ==== ESTILOS ==== */
+const btnMain = {
+  display: "block",
+  width: "100%",
+  padding: "15px",
+  background: "#ff6600",
+  color: "white",
+  fontSize: "16px",
+  fontWeight: "bold",
+  border: "none",
+  borderRadius: "8px",
+  margin: "15px 0",
+  cursor: "pointer",
+};
+
+const btnCircle = {
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+  border: "none",
+  background: "#ff6600",
+  color: "#fff",
+  fontSize: "20px",
+  fontWeight: "bold",
+  cursor: "pointer",
+};
+
+const input = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  border: "1px solid #ccc",
+  borderRadius: "6px",
+  fontSize: "14px",
+};
+
+const label = {
+  fontWeight: "bold",
+  display: "block",
+  marginBottom: "5px",
+};
+
+const card = {
+  background: "#f9f9f9",
+  padding: "12px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+  marginBottom: "15px",
+};
+
+const uploadBox = {
+  border: "2px dashed #ccc",
+  borderRadius: "8px",
+  padding: "20px",
+  textAlign: "center",
+  marginBottom: "15px",
+};
