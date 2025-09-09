@@ -1,174 +1,233 @@
-// pages/index.js
 import { useState } from "react";
 
 export default function Home() {
-  const [tickets, setTickets] = useState(2);
-  const price = 15;
-  const total = tickets * price;
+  const [cantidad, setCantidad] = useState(2);
+  const precio = 15; // precio por boleto en Bs
+  const total = cantidad * precio;
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    alert("Copiado en portapapeles ✅");
+  // copiar texto
+  const copiar = (texto) => {
+    navigator.clipboard.writeText(texto);
+    alert("Copiado ✅");
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center">
+    <div style={{ fontFamily: "Arial, sans-serif", background: "#000", color: "#f1f1f1" }}>
       {/* HEADER */}
-      <header className="w-full bg-orange-600 p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="h-16 w-auto rounded-lg shadow-lg"
-          />
-          <p className="text-sm md:text-base max-w-md">
-            <span className="font-bold">Juega y gana con Freydel</span>, cada
-            boleto no solo te acerca al premio, sino que también te convierte en
-            parte de una comunidad que confía, juega y gana. Tu participación es
-            la clave para hacer realidad sueños y vivir la emoción de ganar.{" "}
-            <span className="font-bold">¡Asegura tus boletos hoy!</span>
-          </p>
-        </div>
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "12px 20px",
+          background: "#ff6600",
+        }}
+      >
+        <img src="/logo.png" alt="Logo" style={{ height: "65px" }} />
+        <p style={{ fontSize: "13px", lineHeight: "1.4", marginLeft: "15px", color: "#fff" }}>
+          <b>Juega y gana con Freydel</b> 🎉 <br />
+          Cada boleto no solo te acerca al premio, <br />
+          también te convierte en parte de una comunidad que confía, juega y gana.
+        </p>
       </header>
 
-      {/* FLYER */}
-      <section className="p-6 text-center">
+      {/* FLAYER */}
+      <div style={{ textAlign: "center", margin: "15px 0" }}>
         <img
           src="/flayer.png"
           alt="Flayer"
-          className="w-full max-w-md rounded-lg shadow-lg"
+          style={{
+            width: "95%",
+            maxWidth: "600px",
+            borderRadius: "12px",
+            boxShadow: "0 4px 15px rgba(255,102,0,0.5)",
+          }}
         />
-      </section>
+      </div>
 
-      {/* FORMULARIO */}
-      <section className="w-full max-w-lg bg-zinc-900 p-6 rounded-xl shadow-lg space-y-4">
-        <h2 className="text-xl font-bold text-center mb-4">
-          Completa tus datos
+      {/* CONTENEDOR */}
+      <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#ff6600" }}>
+          🎟️ Compra tus boletos
         </h2>
 
-        <input
-          type="text"
-          placeholder="Nombre completo"
-          className="w-full p-3 rounded bg-black border border-zinc-700"
-        />
-        <input
-          type="tel"
-          placeholder="Teléfono"
-          className="w-full p-3 rounded bg-black border border-zinc-700"
-        />
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          className="w-full p-3 rounded bg-black border border-zinc-700"
-        />
-        <input
-          type="text"
-          placeholder="Cédula"
-          className="w-full p-3 rounded bg-black border border-zinc-700"
-        />
-
-        {/* Selección de tickets */}
-        <div className="flex items-center justify-between mt-4">
-          <button
-            onClick={() => setTickets(Math.max(2, tickets - 1))}
-            className="px-4 py-2 bg-orange-600 rounded-lg"
-          >
+        {/* BOLETOS */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "15px",
+            margin: "20px 0",
+          }}
+        >
+          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>
             -
           </button>
-          <span className="text-lg font-bold">{tickets} boletos</span>
-          <button
-            onClick={() => setTickets(tickets + 1)}
-            className="px-4 py-2 bg-orange-600 rounded-lg"
-          >
+          <span style={{ fontSize: "22px", fontWeight: "bold" }}>{cantidad}</span>
+          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>
             +
           </button>
         </div>
 
-        <p className="text-center mt-2">
-          Total: <span className="font-bold">{total} Bs</span>
-        </p>
+        {/* TOTAL */}
+        <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Total: <span style={{ color: "#ff6600" }}>{total} Bs</span>
+        </h3>
 
-        {/* Métodos de pago */}
-        <div className="mt-6 space-y-4">
-          <h3 className="text-lg font-bold text-center">Métodos de Pago</h3>
+        {/* FORMULARIO */}
+        <form style={{ marginTop: "25px" }}>
+          <label style={label}>Nombres y Apellidos *</label>
+          <input type="text" required style={input} />
+
+          <label style={label}>Teléfono *</label>
+          <input type="tel" required style={input} />
+
+          <label style={label}>Correo *</label>
+          <input type="email" required style={input} />
+
+          {/* MÉTODOS DE PAGO */}
+          <h3 style={{ margin: "25px 0 15px", color: "#ff6600" }}>💳 Métodos de Pago</h3>
 
           {/* Pago Móvil */}
-          <div className="bg-zinc-800 p-4 rounded-lg">
-            <div className="flex justify-between items-center">
-              <img
-                src="/provincial.png"
-                alt="Provincial"
-                className="h-10 w-auto"
-              />
-              <button
-                onClick={() =>
-                  copyToClipboard("Banco Provincial - CI: 30281789 - Tel: 04244214965")
-                }
-                className="text-sm px-3 py-1 bg-orange-600 rounded-lg"
-              >
-                Copiar
+          <div style={card}>
+            <div style={cardHeader}>
+              <img src="/provincial.png" alt="Provincial" style={{ height: "25px" }} />
+              <button type="button" onClick={() => copiar("04244214965 - CI: 30281789")} style={copyBtn}>
+                📋
               </button>
             </div>
-            <p className="text-sm mt-2">Banco Provincial</p>
-            <p className="text-sm">CI: 30281789</p>
-            <p className="text-sm">Tel: 04244214965</p>
+            <p style={{ margin: "5px 0" }}>
+              Teléfono: <b>04244214965</b> <br />
+              C.I: <b>30281789</b>
+            </p>
           </div>
 
           {/* Binance */}
-          <div className="bg-zinc-800 p-4 rounded-lg">
-            <div className="flex justify-between items-center">
-              <img
-                src="/binance.png"
-                alt="Binance"
-                className="h-10 w-auto"
-              />
-              <button
-                onClick={() => copyToClipboard("Binance ID: 403244297")}
-                className="text-sm px-3 py-1 bg-orange-600 rounded-lg"
-              >
-                Copiar
+          <div style={card}>
+            <div style={cardHeader}>
+              <img src="/binance.png" alt="Binance" style={{ height: "25px" }} />
+              <button type="button" onClick={() => copiar("ID: 403244297")} style={copyBtn}>
+                📋
               </button>
             </div>
-            <p className="text-sm mt-2">ID: 403244297</p>
+            <p style={{ margin: "5px 0" }}>
+              ID: <b>403244297</b>
+            </p>
           </div>
-        </div>
 
-        {/* Subida de comprobante */}
-        <div className="mt-6">
-          <label className="block mb-2 font-bold">Subir comprobante</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="w-full text-sm bg-black border border-zinc-700 rounded-lg p-2"
-          />
-          <p className="text-xs text-red-400 mt-2">
-            ⚠️ Recuerda: el comprobante debe estar completo, con todos los
-            datos visibles y legibles.
+          {/* COMPROBANTE */}
+          <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>🧾 Comprobante de Pago</h3>
+
+          <div style={uploadBox}>
+            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
+              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
+                📤 Foto / Captura de Pantalla
+              </div>
+            </label>
+            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+          </div>
+
+          <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center", color: "#ff6600" }}>
+            ⚠️ Recuerda: Debes subir el comprobante para validar tu compra.
           </p>
-        </div>
-      </section>
 
-      {/* FOOTER */}
-      <footer className="mt-10 mb-6 text-center">
-        <a
-          href="https://instagram.com/TU_USUARIO"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center space-x-2 text-orange-500 hover:underline"
-        >
-          {/* Ícono Instagram en SVG */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 24 24"
+          <p style={{ marginTop: "15px", fontWeight: "bold", textAlign: "center" }}>
+            {total} Bs ({cantidad} boletos)
+          </p>
+
+          <button type="submit" style={btnMain}>
+            CONFIRMAR
+          </button>
+        </form>
+
+        {/* === FOOTER === */}
+        <footer style={{ marginTop: "40px", textAlign: "center", padding: "20px", borderTop: "1px solid #333" }}>
+          <a
+            href="https://instagram.com/TU_INSTAGRAM"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#ff6600", fontSize: "20px", textDecoration: "none" }}
           >
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.35 3.608 1.325.975.975 1.263 2.242 1.325 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.35 2.633-1.325 3.608-.975.975-2.242 1.263-3.608 1.325-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.35-3.608-1.325-.975-.975-1.263-2.242-1.325-3.608C2.175 15.747 2.163 15.367 2.163 12s.012-3.584.07-4.85c.062-1.366.35-2.633 1.325-3.608.975-.975 2.242-1.263 3.608-1.325C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.775.131 4.638.407 3.678 1.367c-.96.96-1.236 2.097-1.295 3.374C2.324 6.021 2.311 6.43 2.311 9.689v4.622c0 3.259.013 3.668.072 4.948.059 1.277.335 2.414 1.295 3.374.96.96 2.097 1.236 3.374 1.295 1.28.059 1.689.072 4.948.072s3.668-.013 4.948-.072c1.277-.059 2.414-.335 3.374-1.295.96-.96 1.236-2.097 1.295-3.374.059-1.28.072-1.689.072-4.948V9.689c0-3.259-.013-3.668-.072-4.948-.059-1.277-.335-2.414-1.295-3.374-.96-.96-2.097-1.236-3.374-1.295C15.668.013 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
-          </svg>
-          <span>Sígueme en Instagram</span>
-        </a>
-      </footer>
+            📷 Sígueme en Instagram
+          </a>
+        </footer>
+      </div>
     </div>
   );
 }
+
+/* ==== ESTILOS ==== */
+const btnMain = {
+  display: "block",
+  width: "100%",
+  padding: "15px",
+  background: "#ff6600",
+  color: "white",
+  fontSize: "16px",
+  fontWeight: "bold",
+  border: "none",
+  borderRadius: "8px",
+  margin: "15px 0",
+  cursor: "pointer",
+};
+
+const btnCircle = {
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+  border: "none",
+  background: "#ff6600",
+  color: "#fff",
+  fontSize: "20px",
+  fontWeight: "bold",
+  cursor: "pointer",
+};
+
+const input = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  border: "1px solid #444",
+  borderRadius: "6px",
+  fontSize: "14px",
+  background: "#111",
+  color: "#fff",
+};
+
+const label = {
+  fontWeight: "bold",
+  display: "block",
+  marginBottom: "5px",
+};
+
+const card = {
+  background: "#111",
+  padding: "12px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+  marginBottom: "15px",
+};
+
+const cardHeader = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: "8px",
+};
+
+const copyBtn = {
+  background: "transparent",
+  border: "none",
+  color: "#ff6600",
+  fontSize: "18px",
+  cursor: "pointer",
+};
+
+const uploadBox = {
+  border: "2px dashed #444",
+  borderRadius: "8px",
+  padding: "20px",
+  textAlign: "center",
+  marginBottom: "15px",
+};
