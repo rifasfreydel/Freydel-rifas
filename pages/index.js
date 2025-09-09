@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Copy, Instagram } from "lucide-react"; // iconos minimalistas
 
 export default function Home() {
   const [cantidad, setCantidad] = useState(2);
-  const precio = 15; // precio por boleto en Bs
+  const precio = 15;
   const total = cantidad * precio;
 
   // copiar texto al portapapeles
@@ -24,7 +23,7 @@ export default function Home() {
           background: "#ff6600",
         }}
       >
-        <img src="/logo.png" alt="Logo" style={{ height: "65px" }} />
+        <img src="/logo.png" alt="Logo" style={{ height: "75px" }} />
         <p style={{ fontSize: "13px", lineHeight: "1.4", marginLeft: "15px", color: "#fff" }}>
           <b>Juega y gana con Freydel</b> 🎉 <br />
           Cada boleto no solo te acerca al premio, <br />
@@ -93,12 +92,8 @@ export default function Home() {
           <div style={card}>
             <div style={cardHeader}>
               <img src="/provincial.png" alt="Provincial" style={{ height: "25px" }} />
-              <button
-                type="button"
-                onClick={() => copiar("04244214965 - CI: 30281789")}
-                style={copyBtn}
-              >
-                <Copy size={16} />
+              <button type="button" onClick={() => copiar("04244214965 - CI: 30281789")} style={copyBtn}>
+                📄 Copiar
               </button>
             </div>
             <p style={{ margin: "5px 0" }}>
@@ -111,7 +106,7 @@ export default function Home() {
             <div style={cardHeader}>
               <img src="/binance.png" alt="Binance" style={{ height: "25px" }} />
               <button type="button" onClick={() => copiar("ID: 403244297")} style={copyBtn}>
-                <Copy size={16} />
+                📄 Copiar
               </button>
             </div>
             <p style={{ margin: "5px 0" }}>
@@ -122,17 +117,12 @@ export default function Home() {
           {/* COMPROBANTE DE PAGO */}
           <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>🧾 Comprobante de Pago</h3>
 
-          <label
-            style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
-          >
+          <label style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <input type="checkbox" /> Enviar captura inmediatamente
           </label>
 
           <div style={uploadBox}>
-            <label
-              htmlFor="comprobante"
-              style={{ cursor: "pointer", textAlign: "center", width: "100%" }}
-            >
+            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
               <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
                 📤 Foto / Captura de Pantalla
               </div>
@@ -231,35 +221,29 @@ export default function Home() {
             </button>
           </form>
         </div>
-      </div>
 
-      {/* === FOOTER === */}
-      <footer
-        style={{
-          background: "#111",
-          color: "#f1f1f1",
-          padding: "25px 20px",
-          marginTop: "50px",
-          textAlign: "center",
-        }}
-      >
-        <h3 style={{ color: "#ff6600", marginBottom: "10px" }}>📌 Contacto</h3>
-        <p style={{ margin: "5px 0" }}>📍 La Guaira, Distrito Capital, Venezuela</p>
-        <p style={{ margin: "5px 0" }}>📞 +58 424 4214965</p>
-        <div style={{ marginTop: "15px" }}>
+        {/* === INSTAGRAM === */}
+        <footer style={{ marginTop: "50px", textAlign: "center" }}>
           <a
-            href="https://instagram.com/tucuenta"
+            href="https://instagram.com/tuusuario"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#ff6600", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", fontWeight: "bold" }}
+            style={{ textDecoration: "none", color: "#ff6600", fontWeight: "bold" }}
           >
-            <Instagram size={20} /> Síguenos en Instagram
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style={{ verticalAlign: "middle", marginRight: "8px" }}
+            >
+              <path d="M7.75 2C4.678 2 2 4.678 2 7.75v8.5C2 19.322 4.678 22 7.75 22h8.5c3.072 0 5.75-2.678 5.75-5.75v-8.5C22 4.678 19.322 2 16.25 2h-8.5zm0 2h8.5C18.216 4 20 5.784 20 7.75v8.5A3.752 3.752 0 0 1 16.25 20h-8.5A3.752 3.752 0 0 1 4 16.25v-8.5C4 5.784 5.784 4 7.75 4zm10 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path>
+            </svg>
+            Síguenos en Instagram
           </a>
-        </div>
-        <p style={{ marginTop: "15px", fontSize: "12px", color: "#888" }}>
-          © {new Date().getFullYear()} Rifa con Freydel. Todos los derechos reservados.
-        </p>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
@@ -325,9 +309,12 @@ const cardHeader = {
 
 const copyBtn = {
   background: "transparent",
-  border: "none",
+  border: "1px solid #ff6600",
+  borderRadius: "6px",
+  padding: "4px 8px",
   color: "#ff6600",
   cursor: "pointer",
+  fontSize: "13px",
 };
 
 const uploadBox = {
