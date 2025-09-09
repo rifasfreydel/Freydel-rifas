@@ -1,37 +1,27 @@
 import { useState } from "react";
+import { Copy } from "lucide-react";
 
 export default function Home() {
   const [cantidad, setCantidad] = useState(2);
-  const precio = 15; // precio por boleto
+  const [toast, setToast] = useState("");
+  const precio = 15;
   const total = cantidad * precio;
 
-  // Función para copiar al portapapeles
-  const copiarTexto = (texto) => {
-    navigator.clipboard.writeText(texto);
-    alert("Copiado: " + texto);
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setToast("Copiado ✅");
+    setTimeout(() => setToast(""), 2000);
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", background: "#111", color: "#fff" }}>
+    <div style={{ fontFamily: "Arial, sans-serif", background: "#000", color: "#fff", minHeight: "100vh" }}>
       {/* HEADER */}
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
-          background: "#ff6600",
-          padding: "10px 16px",
-        }}
-      >
-        <img src="/logo.png" alt="Logo" style={{ height: "55px", borderRadius: "50%" }} />
-        <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight: "1.2" }}>
-          Juega y gana con Freydel<br />
-          ¡Tu oportunidad de hacer realidad sueños!
-        </p>
+      <header style={{ textAlign: "center", padding: "15px", background: "#111" }}>
+        <img src="/logo.png" alt="Logo" style={{ height: "70px" }} />
       </header>
 
       {/* FLAYER */}
-      <div style={{ textAlign: "center", margin: "15px 0" }}>
+      <div style={{ textAlign: "center", margin: "20px 0" }}>
         <img
           src="/flayer.png"
           alt="Flayer"
@@ -39,7 +29,7 @@ export default function Home() {
             width: "95%",
             maxWidth: "600px",
             borderRadius: "12px",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
+            boxShadow: "0 4px 15px rgba(255,255,255,0.15)",
           }}
         />
       </div>
@@ -51,25 +41,10 @@ export default function Home() {
         </h2>
 
         {/* BOLETOS */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "15px",
-            margin: "20px 0",
-          }}
-        >
-          <button
-            style={btnCircle}
-            onClick={() => setCantidad(Math.max(2, cantidad - 1))}
-          >
-            -
-          </button>
-          <span style={{ fontSize: "20px", fontWeight: "bold" }}>{cantidad}</span>
-          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>
-            +
-          </button>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px", margin: "20px 0" }}>
+          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>-</button>
+          <span style={{ fontSize: "22px", fontWeight: "bold" }}>{cantidad}</span>
+          <button style={btnCircle} onClick={() => setCantidad(cantidad + 1)}>+</button>
         </div>
 
         {/* TOTAL */}
@@ -90,48 +65,43 @@ export default function Home() {
 
           {/* MÉTODOS DE PAGO */}
           <h3 style={{ margin: "25px 0 10px", color: "#ff6600" }}>💳 Métodos de Pago</h3>
-
-          {/* PAGO MÓVIL */}
-          <div style={cardBank}>
-            <img src="/provincial.png" alt="Provincial" style={{ width: "50px", marginBottom: "8px" }} />
-            <strong>Banco Provincial</strong>
-            <p>Tipo: Pago móvil</p>
-            <p>
-              Cédula: 30281789{" "}
-              <button onClick={() => copiarTexto("30281789")} style={btnCopy}>📋</button>
-            </p>
-            <p>
-              Teléfono: 04244214965{" "}
-              <button onClick={() => copiarTexto("04244214965")} style={btnCopy}>📋</button>
-            </p>
-            <p>
-              Email: rifasfreydel@gmail.com{" "}
-              <button onClick={() => copiarTexto("rifasfreydel@gmail.com")} style={btnCopy}>📋</button>
-            </p>
-            <p style={{ color: "yellow", fontWeight: "bold", marginTop: "10px" }}>
-              ⚠️ Colocar referencia completa. Comprobantes incompletos serán rechazados.
+          <div style={card}>
+            <strong>Pago Móvil - Banco Provincial</strong>
+            <p style={{ margin: "5px 0" }}>
+              Teléfono: <b>04244214965</b>
+              <Copy style={icon} onClick={() => copyToClipboard("04244214965")} />
+              <br />
+              C.I: <b>30281789</b>
+              <Copy style={icon} onClick={() => copyToClipboard("30281789")} />
             </p>
           </div>
 
-          {/* BINANCE */}
-          <div style={cardBank}>
-            <img src="/binance.png" alt="Binance" style={{ width: "50px", marginBottom: "8px" }} />
+          <div style={card}>
             <strong>Binance</strong>
-            <p>
-              ID: 403244297{" "}
-              <button onClick={() => copiarTexto("403244297")} style={btnCopy}>📋</button>
-            </p>
-            <p style={{ color: "yellow", fontWeight: "bold", marginTop: "10px" }}>
-              ⚠️ Colocar referencia completa. Comprobantes incompletos serán rechazados.
+            <p style={{ margin: "5px 0" }}>
+              ID: <b>403244297</b>
+              <Copy style={icon} onClick={() => copyToClipboard("403244297")} />
             </p>
           </div>
 
           {/* COMPROBANTE DE PAGO */}
           <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>🧾 Comprobante de Pago</h3>
-          <input id="comprobante" type="file" accept="image/*" required style={input} />
+
+          <div style={uploadBox}>
+            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
+              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
+                📤 Subir Comprobante (Foto / Captura)
+              </div>
+            </label>
+            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+          </div>
 
           <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center" }}>
-            Total a pagar: {total} Bs ({cantidad} boletos)
+            BANESCO: {total} Bs ({cantidad} boletos)
+          </p>
+
+          <p style={{ textAlign: "center", fontSize: "12px", marginTop: "10px" }}>
+            Al confirmar autorizo el uso de <span style={{ color: "#ff6600", fontWeight: "bold" }}>Mis Datos Personales</span>
           </p>
 
           <button type="submit" style={btnMain}>
@@ -139,22 +109,48 @@ export default function Home() {
           </button>
         </form>
 
-        {/* PROGRESO DE VENTA */}
-        <div style={{ marginTop: "30px" }}>
-          <p style={{ marginBottom: "5px" }}>42.7% vendido</p>
-          <div style={{ width: "100%", background: "#333", borderRadius: "8px" }}>
-            <div style={{ width: "42.7%", height: "12px", background: "#6a5acd", borderRadius: "8px" }}></div>
+        {/* PROGRESO */}
+        <div style={{ marginTop: "30px", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "10px", color: "#ff6600" }}>🎯 Progreso de la Rifa</h3>
+          <div style={{
+            background: "#222",
+            borderRadius: "20px",
+            overflow: "hidden",
+            height: "25px",
+            maxWidth: "500px",
+            margin: "0 auto"
+          }}>
+            <div style={{
+              width: "42.7%",
+              background: "#ff6600",
+              height: "100%",
+              textAlign: "center",
+              color: "white",
+              fontWeight: "bold",
+              lineHeight: "25px"
+            }}>
+              42.7% vendido
+            </div>
           </div>
         </div>
-
-        {/* VERIFICAR TICKETS */}
-        <div style={{ marginTop: "40px", textAlign: "center" }}>
-          <h3>¿Quieres verificar tus tickets?</h3>
-          <p>Ingresa tu correo aquí:</p>
-          <input type="email" placeholder="Ingrese email para la verificación..." style={input} />
-          <button style={btnMain}>Verificar mis tickets</button>
-        </div>
       </div>
+
+      {/* TOAST */}
+      {toast && (
+        <div style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          background: "#ff6600",
+          color: "#fff",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          fontWeight: "bold",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.3)"
+        }}>
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
@@ -190,11 +186,10 @@ const input = {
   width: "100%",
   padding: "10px",
   marginBottom: "15px",
-  border: "1px solid #444",
+  border: "1px solid #ccc",
   borderRadius: "6px",
   fontSize: "14px",
-  background: "#222",
-  color: "#fff",
+  color: "#000",
 };
 
 const label = {
@@ -203,19 +198,27 @@ const label = {
   marginBottom: "5px",
 };
 
-const cardBank = {
-  background: "#1e1e1e",
-  padding: "15px",
-  borderRadius: "10px",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-  marginBottom: "20px",
+const card = {
+  background: "#111",
+  padding: "12px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 5px rgba(0,0,0,0.5)",
+  marginBottom: "15px",
 };
 
-const btnCopy = {
-  background: "none",
-  border: "none",
-  color: "#ff6600",
-  cursor: "pointer",
-  fontSize: "16px",
+const uploadBox = {
+  border: "2px dashed #555",
+  borderRadius: "8px",
+  padding: "20px",
+  textAlign: "center",
+  marginBottom: "15px",
+};
+
+const icon = {
   marginLeft: "8px",
+  cursor: "pointer",
+  color: "#ff6600",
+  width: "18px",
+  height: "18px",
+  verticalAlign: "middle"
 };
