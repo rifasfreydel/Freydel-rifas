@@ -1,25 +1,88 @@
 import { useState, useEffect } from "react";
-import { Copy, Instagram } from "lucide-react"; // iconos minimalistas
+import { Copy, Instagram } from "lucide-react";
+import { app } from "../lib/firebase";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const db = getFirestore(app);
+const storage = getStorage(app);
 
 export default function Home() {
   const [cantidad, setCantidad] = useState(2);
-  const precio = 15; // precio por boleto en Bs
+  const [nombre, setNombre] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [comprobante, setComprobante] = useState(null);
+  const [enviado, setEnviado] = useState(false);
+
+  const precio = 15;
   const total = cantidad * precio;
 
-  // forzar fondo negro en todo el body
   useEffect(() => {
     document.body.style.background = "#000";
     document.body.style.margin = "0";
   }, []);
 
-  // copiar texto al portapapeles
   const copiar = (texto) => {
     navigator.clipboard.writeText(texto);
-    alert("Copiado ✅");
+  };
+
+  // === ENVIAR COMPRA ===
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setEnviado(false);
+
+    try {
+      let comprobanteURL = "";
+
+      // subir comprobante si existe
+      if (comprobante) {
+        const fileRef = ref(
+          storage,
+          `comprobantes/${Date.now()}_${comprobante.name}`
+        );
+        await uploadBytes(fileRef, comprobante);
+        comprobanteURL = await getDownloadURL(fileRef);
+      }
+
+      // guardar compra en Firestore
+      await addDoc(collection(db, "compras"), {
+        nombre,
+        telefono,
+        correo,
+        cantidad,
+        total,
+        comprobanteURL,
+        estado: "pendiente",
+        fecha: serverTimestamp(),
+      });
+
+      // limpiar
+      setNombre("");
+      setTelefono("");
+      setCorreo("");
+      setCantidad(2);
+      setComprobante(null);
+      setEnviado(true);
+    } catch (err) {
+      console.error("Error al guardar compra:", err);
+    }
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", background: "#000", color: "#f1f1f1", minHeight: "100vh" }}>
+    <div
+      style={{
+        fontFamily: "Arial, sans-serif",
+        background: "#000",
+        color: "#f1f1f1",
+        minHeight: "100vh",
+      }}
+    >
       {/* HEADER */}
       <header
         style={{
@@ -39,9 +102,9 @@ export default function Home() {
             color: "#fff",
           }}
         >
-          <b>Juega y gana con Freydel</b> 🎉 <br />
-          Cada boleto no solo te acerca al premio,
-          también te convierte en parte de una comunidad que confía, juega y gana.
+          <b>Juega y gana con Freydel</b> <br />
+          Cada boleto no solo te acerca al premio, también te convierte en parte
+          de una comunidad que confía, juega y gana.
         </p>
       </header>
 
@@ -61,8 +124,14 @@ export default function Home() {
 
       {/* CONTENEDOR */}
       <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#ff6600" }}>
-          🎟️ Compra tus boletos
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            color: "#ff6600",
+          }}
+        >
+          Compra tus boletos
         </h2>
 
         {/* BOLETOS */}
@@ -75,7 +144,10 @@ export default function Home() {
             margin: "20px 0",
           }}
         >
-          <button style={btnCircle} onClick={() => setCantidad(Math.max(2, cantidad - 1))}>
+          <button
+            style={btnCircle}
+            onClick={() => setCantidad(Math.max(2, cantidad - 1))}
+          >
             -
           </button>
           <span style={{ fontSize: "22px", fontWeight: "bold" }}>{cantidad}</span>
@@ -90,18 +162,38 @@ export default function Home() {
         </h3>
 
         {/* FORMULARIO */}
-        <form style={{ marginTop: "25px" }}>
+        <form style={{ marginTop: "25px" }} onSubmit={handleSubmit}>
           <label style={label}>Nombres y Apellidos *</label>
-          <input type="text" required style={input} />
+          <input
+            type="text"
+            required
+            style={input}
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
 
           <label style={label}>Teléfono *</label>
-          <input type="tel" required style={input} />
+          <input
+            type="tel"
+            required
+            style={input}
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+          />
 
           <label style={label}>Correo *</label>
-          <input type="email" required style={input} />
+          <input
+            type="email"
+            required
+            style={input}
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+          />
 
           {/* MÉTODOS DE PAGO */}
-          <h3 style={{ margin: "25px 0 15px", color: "#ff6600" }}>💳 Métodos de Pago</h3>
+          <h3 style={{ margin: "25px 0 15px", color: "#ff6600" }}>
+            Métodos de Pago
+          </h3>
 
           <div style={card}>
             <div style={cardHeader}>
@@ -123,125 +215,78 @@ export default function Home() {
           <div style={card}>
             <div style={cardHeader}>
               <img src="/binance.png" alt="Binance" style={{ height: "25px" }} />
-              <button type="button" onClick={() => copiar("ID: 403244297")} style={copyBtn}>
+              <button
+                type="button"
+                onClick={() => copiar("ID: 403244297")}
+                style={copyBtn}
+              >
                 <Copy size={16} />
               </button>
             </div>
-            <p style={{ margin: "5px 0" }}>
-              ID: <b>403244297</b>
-            </p>
+            <p style={{ margin: "5px 0" }}>ID: <b>403244297</b></p>
           </div>
 
           {/* COMPROBANTE DE PAGO */}
-          <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>🧾 Comprobante de Pago</h3>
-
-          <label style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-            <input type="checkbox" /> Enviar captura inmediatamente
-          </label>
+          <h3 style={{ margin: "30px 0 10px", color: "#ff6600" }}>
+            Comprobante de Pago
+          </h3>
 
           <div style={uploadBox}>
-            <label htmlFor="comprobante" style={{ cursor: "pointer", textAlign: "center", width: "100%" }}>
-              <div style={{ color: "#ff6600", fontWeight: "bold", fontSize: "14px" }}>
-                📤 Foto / Captura de Pantalla
+            <label
+              htmlFor="comprobante"
+              style={{ cursor: "pointer", textAlign: "center", width: "100%" }}
+            >
+              <div
+                style={{
+                  color: "#ff6600",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                }}
+              >
+                Foto / Captura de Pantalla
               </div>
             </label>
-            <input id="comprobante" type="file" accept="image/*" required style={{ display: "none" }} />
+            <input
+              id="comprobante"
+              type="file"
+              accept="image/*"
+              required
+              style={{ display: "none" }}
+              onChange={(e) => setComprobante(e.target.files[0])}
+            />
           </div>
 
-          <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center", color: "#ff6600" }}>
-            ⚠️ Recuerda: Debes subir el comprobante para validar tu compra.
-          </p>
-
-          <p style={{ marginTop: "15px", fontWeight: "bold", textAlign: "center" }}>
-            {total} Bs ({cantidad} boletos)
-          </p>
-
-          <p style={{ textAlign: "center", fontSize: "12px", marginTop: "10px" }}>
-            Al confirmar autorizo el uso de{" "}
-            <span style={{ color: "#ff6600", fontWeight: "bold" }}>Mis Datos Personales</span>
+          <p
+            style={{
+              marginTop: "10px",
+              fontWeight: "bold",
+              textAlign: "center",
+              color: "#ff6600",
+            }}
+          >
+            Recuerda: Debes subir el comprobante para validar tu compra.
           </p>
 
           <button type="submit" style={btnMain}>
             CONFIRMAR
           </button>
-        </form>
 
-        {/* === PORCENTAJE DE VENTA === */}
-        <div style={{ marginTop: "30px", textAlign: "center" }}>
-          <h3 style={{ marginBottom: "10px", color: "#ff6600" }}>🎯 Progreso de la Rifa</h3>
-          <div
-            style={{
-              background: "#333",
-              borderRadius: "20px",
-              overflow: "hidden",
-              height: "25px",
-              maxWidth: "500px",
-              margin: "0 auto",
-            }}
-          >
-            <div
+          {enviado && (
+            <p
               style={{
-                width: "42.7%",
-                background: "#ff6600",
-                height: "100%",
                 textAlign: "center",
-                color: "white",
+                color: "green",
+                marginTop: "15px",
                 fontWeight: "bold",
-                lineHeight: "25px",
               }}
             >
-              42.7% vendido
-            </div>
-          </div>
-        </div>
-
-        {/* === VERIFICAR TICKETS === */}
-        <div style={{ marginTop: "40px", textAlign: "center" }}>
-          <h3 style={{ marginBottom: "15px", color: "#ff6600" }}>📩 ¿Quieres verificar tus tickets?</h3>
-          <p>Ingresa tu correo y te los enviaremos allí:</p>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("✅ Revisa tu bandeja de entrada, pronto recibirás tus tickets.");
-            }}
-            style={{ maxWidth: "400px", margin: "20px auto" }}
-          >
-            <input
-              type="email"
-              placeholder="Ingresa tu correo..."
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "6px",
-                border: "1px solid #444",
-                marginBottom: "15px",
-                background: "#111",
-                color: "#fff",
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "6px",
-                border: "none",
-                background: "#ff6600",
-                color: "white",
-                fontWeight: "bold",
-                fontSize: "16px",
-                cursor: "pointer",
-              }}
-            >
-              Verificar mis tickets
-            </button>
-          </form>
-        </div>
+              Tu compra fue enviada, espera la validación.
+            </p>
+          )}
+        </form>
       </div>
 
-      {/* === FOOTER === */}
+      {/* FOOTER */}
       <footer
         style={{
           background: "#111",
@@ -251,12 +296,12 @@ export default function Home() {
           textAlign: "center",
         }}
       >
-        <h3 style={{ color: "#ff6600", marginBottom: "10px" }}>📌 Contacto</h3>
-        <p style={{ margin: "5px 0" }}>📍 Valencia, Carabobo, Venezuela</p>
-        <p style={{ margin: "5px 0" }}>📞 +58 424 4214965</p>
+        <h3 style={{ color: "#ff6600", marginBottom: "10px" }}>Contacto</h3>
+        <p style={{ margin: "5px 0" }}>Valencia, Carabobo, Venezuela</p>
+        <p style={{ margin: "5px 0" }}>+58 424 4214965</p>
         <div style={{ marginTop: "15px" }}>
           <a
-            href="https://www.instagram.com/freydeljose?igsh=MWllcTEwbnYyaGJ4Nw=="
+            href="https://www.instagram.com/freydeljose"
             target="_blank"
             rel="noopener noreferrer"
             style={{
