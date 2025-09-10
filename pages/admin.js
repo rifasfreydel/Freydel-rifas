@@ -1,35 +1,108 @@
+// pages/admin.js
 import { useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-export default function Admin() {
-  const [logged, setLogged] = useState(false);
-  const [pass, setPass] = useState("");
+// ⚡ Configuración de Firebase (la misma que tienes en lib/firebase.js)
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+};
 
-  const handleLogin = () => {
-    if (pass === "admin123") setLogged(true);
-    else alert("Clave incorrecta");
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export default function AdminLogin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert("✅ Acceso concedido, bienvenido al panel admin");
+      // aquí más adelante redirigiremos al panel de control
+    } catch (err) {
+      setError("❌ Usuario o contraseña incorrectos");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      {!logged ? (
-        <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
-          <h2 className="mb-4 text-xl font-bold">Acceso Admin</h2>
-          <input
-            type="password"
-            placeholder="Clave"
-            className="w-full p-2 mb-4 text-black rounded"
-            onChange={(e) => setPass(e.target.value)}
-          />
-          <button
-            onClick={handleLogin}
-            className="w-full bg-green-500 py-2 rounded font-bold"
-          >
-            Entrar
-          </button>
-        </div>
-      ) : (
-        <h1 className="text-2xl">Bienvenido Admin (demo)</h1>
-      )}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        background: "#000",
+        color: "#fff",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <form
+        onSubmit={login}
+        style={{
+          background: "#111",
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 0 15px rgba(255,102,0,0.5)",
+          width: "300px",
+        }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#ff6600" }}>
+          🔑 Login Admin
+        </h2>
+
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={input}
+        />
+
+        <label>Contraseña</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={input}
+        />
+
+        {error && <p style={{ color: "red", fontSize: "12px" }}>{error}</p>}
+
+        <button type="submit" style={btn}>
+          Ingresar
+        </button>
+      </form>
     </div>
   );
-        }
+}
+
+const input = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  borderRadius: "6px",
+  border: "1px solid #444",
+  background: "#222",
+  color: "#fff",
+};
+
+const btn = {
+  width: "100%",
+  padding: "12px",
+  background: "#ff6600",
+  color: "white",
+  fontWeight: "bold",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer",
+};
