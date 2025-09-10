@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../lib/firebase"; // aseguramos que existe tu config
+import { useRouter } from "next/router";
+import { app } from "../../lib/firebase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const auth = getAuth(app);
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,8 +19,7 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // redirige al dashboard
-      window.location.href = "/admin/dashboard";
+      router.push("/admin/dashboard"); // redirige con Next.js
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
       console.error(err);
